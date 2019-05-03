@@ -4,7 +4,7 @@ SECTION = "console/tools"
 LICENSE = "CLOSED"
 
 SRC_URI = "gitsm://github.com/tom3333/bld_osbase_linux.git;branch=master"
-SRCREV = "a2f07c7c4feb8b8b4c949ac68d06ffa3ee246941"
+SRCREV = "65a45190e22ca57ecbcb72e4dabf04488951bae7"
 
 S = "${WORKDIR}/git/"
 

@@ -4,7 +4,7 @@ SECTION = "console/tools"
 LICENSE = "CLOSED"
 
 SRC_URI = "gitsm://github.com/tom3333/bld_iotty_linux.git;branch=master"
-SRCREV = "ba7b31e173f6584a64f8807c53fd76c23a37cca1"
+SRCREV = "b875809deeb85afb289e6bc6072550b66ebfb31b"
 
 S = "${WORKDIR}/git/"
 
