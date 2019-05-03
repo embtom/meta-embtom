@@ -1,7 +1,9 @@
 
 include images/imx53-basic-image.bb
 
-IMAGE_FEATURES += "ssh-server-dropbear"
+inherit core-image populate_sdk
+
+IMAGE_FEATURES += "ssh-server-openssh"
 
 IMAGE_INSTALL += " \
     nano \
