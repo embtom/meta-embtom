@@ -1,9 +1,11 @@
 
 include images/imx53-basic-image.bb
 
-inherit core-image populate_sdk
+inherit core-image populate_sdk populate_sdk_qt5
+
 
 IMAGE_FEATURES += "ssh-server-openssh"
+SDKIMAGE_FEATURES += "dbg-pkgs"
 
 IMAGE_INSTALL += " \
     nano \
@@ -23,10 +25,7 @@ IMAGE_INSTALL += " \
     libiotty \
     capnproto \
     udev-automount \
-"
-
-TOOLCHAIN_HOST_TASK_append = " \
-     nativesdk-cmake-dev \
+    kmscube3d \
 "
 
 TOOLCHAIN_TARGET_TASK_append = " \

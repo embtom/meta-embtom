@@ -31,9 +31,6 @@ IMAGE_INSTALL += " \
      libiotty \
      capnproto \
      "
-     
-#     capnproto \
-#
 
 CORE_IMAGE_EXTRA_INSTALL += "wpa-supplicant"
 #CORE_IMAGE_EXTRA_INSTALL += "wireless-tools"
