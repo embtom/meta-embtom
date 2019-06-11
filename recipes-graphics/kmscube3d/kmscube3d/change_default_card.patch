@@ -1,0 +1,12 @@
+diff -Naur a/kmscube/kmscube.c b/kmscube/kmscube.c
+--- a/kmscube.c	2019-05-30 10:55:44.209355371 +0200
++++ b/kmscube.c	2019-05-30 10:56:37.191472001 +0200
+@@ -73,7 +73,7 @@
+ 
+ int main(int argc, char *argv[])
+ {
+-	const char *device = "/dev/dri/card0";
++	const char *device = "/dev/dri/card1";
+ 	const char *video = NULL;
+ 	enum mode mode = SMOOTH;
+ 	uint64_t modifier = DRM_FORMAT_MOD_LINEAR;
