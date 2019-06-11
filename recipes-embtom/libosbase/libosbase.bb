@@ -3,7 +3,7 @@ DESCRIPTION = "embtom own osbase layer"
 SECTION = "console/tools"
 LICENSE = "CLOSED"
 
-SRC_URI = "gitsm://github.com/tom3333/bld_osbase_linux.git;branch=master"
+SRC_URI = "gitsm://github.com/embtom/bld_osbase_linux.git;branch=master"
 SRCREV = "65a45190e22ca57ecbcb72e4dabf04488951bae7"
 
 S = "${WORKDIR}/git/"
