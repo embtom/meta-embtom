@@ -19,7 +19,7 @@ inherit cmake
 EXTRA_OECMAKE += "\
     -DBUILD_TESTING=OFF \
 "
-EXTRA_OECMAKE_append_class-target += "-DBUILD_SHARED_LIBS=on"
+EXTRA_OECMAKE_append_class-target += "-DBUILD_SHARED_LIBS=on -DEXTERNAL_CAPNP=on"
 
 FILES_${PN} = "${libdir}/lib*.so.*"
 FILES_${PN}-compiler = "${bindir}"
