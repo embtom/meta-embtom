@@ -27,6 +27,7 @@ IMAGE_INSTALL += " \
     capnproto \
     udev-automount \
     kmscube3d \
+    busybox-syslog \
 "
 
 #
