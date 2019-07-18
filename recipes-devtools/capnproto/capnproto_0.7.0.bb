@@ -16,10 +16,26 @@ DEPENDS_append_class-target += " capnproto-native"
 S = "${WORKDIR}/git/c++"
 
 inherit cmake
-EXTRA_OECMAKE += "\
-    -DBUILD_TESTING=OFF \
-"
-EXTRA_OECMAKE_append_class-target += "-DBUILD_SHARED_LIBS=on"
+
+EXTRA_OECMAKE += "-DBUILD_TESTING=OFF"
+EXTRA_OECMAKE_append_class-target += "-DBUILD_SHARED_LIBS=on -DEXTERNAL_CAPNP=on"
+EXTRA_OECMAKE_append_class-native += "-DEXTERNAL_CAPNP=on"
+EXTRA_OECMAKE_append_class-nativesdk += "-DEXTERNAL_CAPNP=on"
+
+
+do_install_append_class-nativesdk () {
+    mkdir -p ${D}${SDKPATHNATIVE}/environment-setup.d/
+    script=${D}${SDKPATHNATIVE}/environment-setup.d/capnproto.sh
+    echo 'export CAPNP=$OECORE_NATIVE_SYSROOT/usr/bin/capnp' >> $script
+    echo 'export CAPNPC_CXX=$OECORE_NATIVE_SYSROOT/usr/bin/capnpc-c++' >> $script
+    echo 'export CAPNPC_CAPNP=$OECORE_NATIVE_SYSROOT/usr/bin/capnpc-capnp' >> $script
+}
+
+do_install_append_class-target() {
+    sed -i 's/"${_IMPORT_PREFIX}\/bin\/capnp"/"$ENV{CAPNP}"/g' ${D}/usr/lib/cmake/CapnProto/CapnProtoTargets-noconfig.cmake
+    sed -i 's/"${_IMPORT_PREFIX}\/bin\/capnpc-c++"/"$ENV{CAPNPC_CXX}"/g' ${D}/usr/lib/cmake/CapnProto/CapnProtoTargets-noconfig.cmake
+    sed -i 's/"${_IMPORT_PREFIX}\/bin\/capnpc-capnp"/"$ENV{CAPNPC_CAPNP}"/g' ${D}/usr/lib/cmake/CapnProto/CapnProtoTargets-noconfig.cmake
+}
 
 FILES_${PN} = "${libdir}/lib*.so.*"
 FILES_${PN}-compiler = "${bindir}"
@@ -27,6 +43,7 @@ FILES_${PN}-dev = " ${includedir} \
                     ${libdir}/pkgconfig \
                     ${libdir}/cmake \
                     ${libdir}/lib*.so"
+FILES_${PN}-compiler_append_class-nativesdk = " ${SDKPATHNATIVE}/environment-setup.d/capnproto.sh"
 
 
 PACKAGE_BEFORE_PN = "${PN}-compiler"
