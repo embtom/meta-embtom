@@ -1,0 +1,26 @@
+From a6ed4221acbabeb8ede30ee1ae6e12e9bea1d20f Mon Sep 17 00:00:00 2001
+From: tom <t.willetal@googlemail.com>
+Date: Wed, 24 Jul 2019 16:29:39 +0200
+Subject: [PATCH 1/2] no cmake target export of capnp_tools if EXTERNAL_CAPNP
+ is activated
+
+---
+ c++/src/capnp/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/c++/src/capnp/CMakeLists.txt b/c++/src/capnp/CMakeLists.txt
+index 11cbf5af..851063b8 100644
+--- a/src/capnp/CMakeLists.txt
++++ b/src/capnp/CMakeLists.txt
+@@ -151,7 +151,7 @@ if(NOT CAPNP_LITE)
+   install(FILES ${capnpc_headers} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/capnp")
+ endif()
+ 
+-if(NOT CAPNP_LITE)
++if(NOT CAPNP_LITE AND NOT EXTERNAL_CAPNP)
+   add_executable(capnp_tool
+     compiler/module-loader.c++
+     compiler/capnp.c++
+-- 
+2.17.1
+
