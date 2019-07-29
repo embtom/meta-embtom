@@ -1,0 +1,64 @@
+From 214c11c1613004aead595149a36f7b2064188beb Mon Sep 17 00:00:00 2001
+From: tom <t.willetal@googlemail.com>
+Date: Fri, 26 Jul 2019 09:39:38 +0200
+Subject: [PATCH 2/2] if no capnp_tools target exits check at current PATH if a
+ installation exits
+
+---
+ c++/cmake/CapnProtoConfig.cmake.in | 10 ++++++----
+ c++/cmake/CapnProtoMacros.cmake    | 16 ++++++++++++++--
+ 2 files changed, 20 insertions(+), 6 deletions(-)
+
+diff --git a/c++/cmake/CapnProtoConfig.cmake.in b/c++/cmake/CapnProtoConfig.cmake.in
+index 94ceec0a..29f3fab3 100644
+--- a/cmake/CapnProtoConfig.cmake.in
++++ b/cmake/CapnProtoConfig.cmake.in
+@@ -38,10 +38,12 @@
+ 
+ set(CapnProto_VERSION @VERSION@)
+ 
+-set(CAPNP_EXECUTABLE $<TARGET_FILE:CapnProto::capnp_tool>
+-    CACHE FILEPATH "Location of capnp executable")
+-set(CAPNPC_CXX_EXECUTABLE $<TARGET_FILE:CapnProto::capnpc_cpp>
+-    CACHE FILEPATH "Location of capnpc-c++ executable")
++if(EXTERNAL_CAPNP)
++  set(CAPNP_EXECUTABLE $<TARGET_FILE:CapnProto::capnp_tool>
++      CACHE FILEPATH "Location of capnp executable")
++  set(CAPNPC_CXX_EXECUTABLE $<TARGET_FILE:CapnProto::capnpc_cpp>
++      CACHE FILEPATH "Location of capnpc-c++ executable")
++endif()
+ set(CAPNP_INCLUDE_DIRECTORY "@PACKAGE_CMAKE_INSTALL_FULL_INCLUDEDIR@")
+ 
+ # work around http://public.kitware.com/Bug/view.php?id=15258
+diff --git a/c++/cmake/CapnProtoMacros.cmake b/c++/cmake/CapnProtoMacros.cmake
+index b37cb22c..4794196e 100644
+--- a/cmake/CapnProtoMacros.cmake
++++ b/cmake/CapnProtoMacros.cmake
+@@ -36,10 +36,22 @@ function(CAPNP_GENERATE_CPP SOURCES HEADERS)
+     list(APPEND tool_depends capnp_tool capnpc_cpp)
+   endif()
+   if(NOT CAPNP_EXECUTABLE)
+-    message(SEND_ERROR "Could not locate capnp executable (CAPNP_EXECUTABLE).")
++    find_program(CAPNP_EXECUTABLE capnp)
++    if(CAPNP_EXECUTABLE-NOTFOUND)
++      message(SEND_ERROR "Could not locate capnp executable (CAPNP_EXECUTABLE).")
++    else()
++      message(STATUS "Found capnp executable is ${CAPNP_EXECUTABLE}")
++    endif()
+   endif()
+   if(NOT CAPNPC_CXX_EXECUTABLE)
+-    message(SEND_ERROR "Could not locate capnpc-c++ executable (CAPNPC_CXX_EXECUTABLE).")
++    # Also search in the same directory that `capnp` was found in
++    get_filename_component(capnp_dir "${CAPNP_EXECUTABLE}" DIRECTORY)
++    find_program(CAPNPC_CXX_EXECUTABLE capnpc-c++ HINTS "${capnp_dir}")
++    if(CAPNPC_CXX_EXECUTABLE-NOTFOUND)
++      message(SEND_ERROR "Could not locate capnpc-c++ executable (CAPNPC_CXX_EXECUTABLE).")
++    else()
++      message(STATUS "Found capnpc-c++ executable is ${CAPNPC_CXX_EXECUTABLE}")
++    endif()
+   endif()
+   if(NOT CAPNP_INCLUDE_DIRECTORY)
+     message(SEND_ERROR "Could not locate capnp header files (CAPNP_INCLUDE_DIRECTORY).")
+-- 
+2.17.1
+
